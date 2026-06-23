@@ -17,7 +17,7 @@ const catByN = {}; cat.forEach(c => (catByN[c.n] = c));
 const srcPath = n => path.join(srcDir, `Ozzys Professional Tree and Stump Services Brisbane (${n}).jpg`);
 
 // Display order (lead with strongest, mix categories)
-const order = [14, 5, 29, 1, 11, 8, 23, 17, 28, 26, 31, 6, 21, 3, 9, 22, 24, 19, 12, 2, 7, 18, 30, 10, 4, 33, 20, 27, 13, 25, 16, 15, 32];
+const order = [14, 5, 29, 34, 1, 11, 8, 17, 28, 26, 31, 6, 21, 3, 9, 22, 24, 19, 12, 2, 7, 18, 30, 10, 4, 33, 20, 27, 13, 25, 16, 15, 32];
 
 const categories = [
   { id: 'all', label: 'All Work' },
@@ -48,9 +48,10 @@ async function lqip(src) {
   for (const n of order) {
     const c = catByN[n]; if (!c) { console.log('skip', n); continue; }
     const slug = `${c.category}-brisbane-${String(n).padStart(2, '0')}`;
-    const T = await variants(srcPath(n), path.join(thumbDir, slug), 700, 72);
-    const L = await variants(srcPath(n), path.join(largeDir, slug), 1600, 80);
-    const lq = await lqip(srcPath(n));
+    const src = c.src ? path.join(srcDir, c.src) : srcPath(n);
+    const T = await variants(src, path.join(thumbDir, slug), 700, 72);
+    const L = await variants(src, path.join(largeDir, slug), 1600, 80);
+    const lq = await lqip(src);
     items.push({ id: n, cat: c.category, slug, tw: T.w, th: T.h, lw: L.w, lh: L.h, o: T.w >= T.h ? 'landscape' : 'portrait', alt: c.alt, caption: c.caption, lqip: lq });
     process.stdout.write(`.${n}`);
   }
