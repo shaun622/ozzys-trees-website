@@ -1,4 +1,5 @@
-/* Minimal static file server for local preview (no deps). */
+/* Minimal static file server for local preview (no deps).
+   Mirrors GitHub Pages / Hostinger clean-URL behaviour: /services -> services.html */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -13,21 +14,31 @@ const types = {
 };
 http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
-  if (urlPath === '/') urlPath = '/index.html';
+  if (urlPath.endsWith('/')) urlPath += 'index.html';
   let filePath = path.join(root, urlPath);
   if (!filePath.startsWith(root)) { res.writeHead(403); return res.end('forbidden'); }
-  fs.stat(filePath, (err, st) => {
-    if (err || st.isDirectory()) {
-      filePath = path.join(root, '404.html');
-      return fs.readFile(filePath, (e, data) => {
-        res.writeHead(e ? 404 : 404, { 'Content-Type': 'text/html; charset=utf-8' });
-        res.end(e ? 'Not found' : data);
-      });
-    }
-    fs.readFile(filePath, (e, data) => {
+
+  function send(fp) {
+    fs.readFile(fp, (e, data) => {
       if (e) { res.writeHead(500); return res.end('error'); }
-      res.writeHead(200, { 'Content-Type': types[path.extname(filePath).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+      res.writeHead(200, { 'Content-Type': types[path.extname(fp).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
       res.end(data);
     });
+  }
+  function notFound() {
+    fs.readFile(path.join(root, '404.html'), (e, data) => {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(e ? 'Not found' : data);
+    });
+  }
+
+  fs.stat(filePath, (err, st) => {
+    if (!err && st.isFile()) return send(filePath);
+    if (!err && st.isDirectory()) {
+      const idx = path.join(filePath, 'index.html');
+      return fs.stat(idx, (e2, s2) => (!e2 && s2.isFile()) ? send(idx) : notFound());
+    }
+    // Clean URL: try appending .html (e.g. /services -> services.html)
+    fs.stat(filePath + '.html', (e3, s3) => (!e3 && s3.isFile()) ? send(filePath + '.html') : notFound());
   });
 }).listen(port, () => console.log('Preview server on http://localhost:' + port));
