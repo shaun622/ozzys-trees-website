@@ -1,0 +1,12 @@
+# Normalise line endings: LF in the repo for all text (deployed to Linux/Apache)
+* text=auto eol=lf
+
+# Treat these as binary (no EOL conversion, no diff)
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.woff2 binary
+*.mp4   binary

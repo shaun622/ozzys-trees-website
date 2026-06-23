@@ -1,0 +1,16 @@
+# Original full-size source photos (not served; optimized copies live in
+# assets/gallery and assets/img). Kept locally for re-processing only.
+/assets/originals/
+
+# Secrets — the live Resend API key
+/php/config.php
+
+# Dependencies / build / OS / editor cruft
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code local workspace config
+/.claude/

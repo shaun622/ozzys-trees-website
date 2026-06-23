@@ -1,0 +1,13 @@
+{
+  "name": "ozzys-trees-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static website for Ozzy's Tree & Stump Services, Brisbane Northside.",
+  "scripts": {
+    "build:images": "node scripts/build-images.js",
+    "preview": "node scripts/preview-server.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.2"
+  }
+}

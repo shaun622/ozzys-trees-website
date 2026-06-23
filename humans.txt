@@ -1,0 +1,10 @@
+/* TEAM */
+  Business: Ozzy's Tree & Stump Services
+  Location: Chermside, Brisbane Northside, QLD, Australia
+  Contact: info@ozzystrees.com.au / 0451 308 349
+
+/* SITE */
+  Standards: HTML5, CSS3, vanilla JavaScript
+  Type: Static site (no tracking, no third-party frameworks)
+  Fonts: Bricolage Grotesque, Hanken Grotesk (self-hosted)
+  Components: Built by hand, no UI framework
