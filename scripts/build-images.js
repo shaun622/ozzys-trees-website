@@ -62,7 +62,6 @@ async function lqip(src) {
   // Hero + feature bands (jpg + webp)
   const feats = [
     [14, 'hero', 2400, 82],
-    [29, 'feature-action', 1800, 80],
     [5, 'feature-pruning', 1400, 82],
     [11, 'feature-canopy', 1800, 80],
     [26, 'feature-stump', 1800, 80],
@@ -72,8 +71,11 @@ async function lqip(src) {
     const d = await variants(srcPath(n), path.join(imgDir, name), edge, jq);
     console.log(`${name}: ${d.w}x${d.h}`);
   }
-  // remove unused legacy feature
-  ['feature-removal.jpg', 'feature-ewp.jpg', 'feature-climb.jpg', 'feature-chainsaw.jpg'].forEach(f => {
+  // Named (non-numbered) sources
+  const safety = await variants(path.join(srcDir, 'ozzys trees safety first.jpg'), path.join(imgDir, 'feature-safety'), 1800, 82);
+  console.log(`feature-safety: ${safety.w}x${safety.h}`);
+  // remove unused legacy features
+  ['feature-removal.jpg', 'feature-ewp.jpg', 'feature-climb.jpg', 'feature-chainsaw.jpg', 'feature-action.jpg'].forEach(f => {
     const p = path.join(imgDir, f); if (fs.existsSync(p)) { fs.unlinkSync(p); console.log('removed', f); }
   });
   console.log('DONE');
