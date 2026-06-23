@@ -361,6 +361,20 @@ body.menu-open{overflow:hidden}
 .testi .quote-mark{position:absolute;top:1rem;right:1.3rem;font-family:var(--font-display);font-size:3.4rem;line-height:1;color:var(--mist-200)}
 .review-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;margin-top:2rem}
 
+/* Google rating badge */
+.grating{display:flex;align-items:center;gap:1.1rem 1.3rem;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:1.1rem 1.5rem;max-width:600px;margin-inline:auto;transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+a.grating:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.grating .g-logo{width:36px;height:36px;flex:none}
+.grating .g-score{font-family:var(--font-display);font-weight:800;font-size:2.1rem;line-height:1;color:var(--ink)}
+.grating .g-meta{display:flex;flex-direction:column;gap:.2rem}
+.grating .g-stars{display:flex;gap:.1rem;color:var(--amber-500)}
+.grating .g-stars svg{width:19px;height:19px}
+.grating .g-meta small{color:var(--ink-soft);font-size:.86rem;font-weight:600}
+.grating .g-cta{margin-left:auto;white-space:nowrap;font-weight:700;color:var(--eucalypt-600);display:inline-flex;align-items:center;gap:.4rem}
+.grating .g-cta svg{width:1.05em;height:1.05em;transition:transform .3s var(--ease)}
+a.grating:hover .g-cta svg{transform:translateX(4px)}
+@media (max-width:540px){.grating{justify-content:center;text-align:center}.grating .g-meta{align-items:center}.grating .g-cta{margin-left:0;width:100%;justify-content:center}}
+
 /* ---------- FAQ ---------- */
 .faq{max-width:820px;margin-inline:auto;margin-top:clamp(2rem,5vw,3rem);display:grid;gap:.8rem}
 .faq-item{border-radius:var(--r);background:#fff;box-shadow:var(--shadow-sm);border:1px solid var(--line);overflow:hidden}
