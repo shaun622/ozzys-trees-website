@@ -75,6 +75,16 @@ This regenerates every gallery thumbnail + large image and the hero/feature crop
 
 > Why JPEG, not WebP? For this photo set, mozjpeg actually beats WebP on thumbnails and ties on the large images, so a single well-tuned JPEG is the simplest and lightest option (no `<picture>` needed).
 
+### Adding suburb pages or guides
+
+The 4 suburb landing pages, 3 guide articles and the guides index are generated from `js/_local-content.json` by a template script, so they all share the same header, footer and design:
+
+```bash
+node scripts/build-pages.js
+```
+
+To add another suburb or article, add an entry to `js/_local-content.json` (copy the shape of an existing one), then re-run the command and add the new URL to `sitemap.xml`. Keep suburb copy genuinely local and specific, near-duplicate "doorway" pages get penalised by Google.
+
 Other helpers (PowerShell, Windows):
 
 - `scripts/fetch-fonts.ps1` — re-downloads the self-hosted fonts.
