@@ -586,7 +586,9 @@ a.grating:hover .g-cta svg{transform:translateX(4px)}
 .hours-list b{color:var(--ink)}
 
 /* ---------- About specifics ---------- */
-.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem;margin-top:clamp(2rem,5vw,3rem)}
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:clamp(2rem,5vw,3rem)}
+@media (max-width:880px){.values-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.values-grid{grid-template-columns:1fr}}
 .value-card{padding:1.6rem;border-radius:var(--r-lg);background:#fff;box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:transform .4s var(--ease),box-shadow .4s}
 .value-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
 .value-card .vc-ico{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;background:var(--grad-amber);color:var(--forest-900);box-shadow:var(--shadow-amber)}
