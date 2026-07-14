@@ -19,4 +19,11 @@ return [
     // AFTER verifying ozzystrees.com.au in Resend, switch to your own domain:
     //   'mail_from' => "Ozzy's Website <quote@ozzystrees.com.au>",
     'mail_from' => "Ozzy's Website <onboarding@resend.dev>",
+
+    // Cloudflare Turnstile SECRET key (bot protection for the form).
+    // Create a free widget at https://dash.cloudflare.com  ->  Turnstile  ->  Add site.
+    // You get two keys: put the SITE key in contact.html (data-sitekey), and the SECRET key here.
+    // Leave this blank to disable server-side verification.
+    // Cloudflare's test SECRET key (always passes) is '1x0000000000000000000000000000000AA'.
+    'turnstile_secret' => '',
 ];

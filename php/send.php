@@ -33,6 +33,7 @@ $config  = file_exists($cfgFile) ? include $cfgFile : [];
 $apiKey   = $config['resend_api_key'] ?? getenv('RESEND_API_KEY') ?: '';
 $mailTo   = $config['mail_to']        ?? 'info@ozzystrees.com.au';
 $mailFrom = $config['mail_from']      ?? "Ozzy's Website <onboarding@resend.dev>";
+$turnstileSecret = $config['turnstile_secret'] ?? getenv('TURNSTILE_SECRET') ?: '';
 
 /* ---- Honeypot: silently accept bots ---- */
 if (!empty($_POST['company'])) {
@@ -58,6 +59,30 @@ if ($name === '' || $phone === '' || trim(strip_tags($message)) === '') {
 }
 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     respond(false, 'That email address does not look right. Please check it or leave it blank.', 422);
+}
+
+/* ---- Cloudflare Turnstile (only enforced when a secret is configured) ---- */
+function turnstile_verify($secret, $token, $ip) {
+    $data = http_build_query(['secret' => $secret, 'response' => $token, 'remoteip' => $ip]);
+    $url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $data, CURLOPT_TIMEOUT => 10]);
+        $resp = curl_exec($ch);
+        curl_close($ch);
+    } else {
+        $ctx = stream_context_create(['http' => ['method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'content' => $data, 'timeout' => 10, 'ignore_errors' => true]]);
+        $resp = @file_get_contents($url, false, $ctx);
+    }
+    if ($resp === false) return false;
+    $json = json_decode($resp, true);
+    return isset($json['success']) && $json['success'] === true;
+}
+if ($turnstileSecret !== '') {
+    $token = $_POST['cf-turnstile-response'] ?? '';
+    if ($token === '' || !turnstile_verify($turnstileSecret, $token, $_SERVER['REMOTE_ADDR'] ?? '')) {
+        respond(false, 'Bot check failed. Please refresh the page and try again, or call us on 0451 308 349.', 422);
+    }
 }
 
 if ($apiKey === '') {

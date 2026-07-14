@@ -47,7 +47,17 @@ The contact form posts to `php/send.php`, which sends you an email through [Rese
 3. **Sender address:** until you verify your domain in Resend, leave `mail_from` as the test sender `onboarding@resend.dev` (it only delivers to your Resend account email). Once you've added and verified `ozzystrees.com.au` in Resend (**Domains**), switch `mail_from` to something like `Ozzy's Website <quote@ozzystrees.com.au>` so mail comes from your own domain and lands reliably.
 4. `config.php` is git-ignored, so your key never goes into the repo.
 
-If no key is set, the form politely tells visitors to call instead — it never silently fails.
+If no key is set, the form politely tells visitors to call instead, and never silently fails.
+
+## Bot protection (Cloudflare Turnstile)
+
+The quote form uses [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/) to stop spam bots. It works standalone, so you don't need your DNS on Cloudflare.
+
+1. At [dash.cloudflare.com](https://dash.cloudflare.com) go to **Turnstile → Add site**, enter `ozzystrees.com.au`, and create the widget. You'll get two keys.
+2. Put the **Site key** in `contact.html` (find `data-sitekey="1x00000000000000000000AA"` and replace the value).
+3. Put the **Secret key** in `php/config.php` as `turnstile_secret`.
+
+Until you swap them, the site uses Cloudflare's public test keys (the widget shows and always passes, so nothing breaks). Server-side verification only enforces once `turnstile_secret` is set, so the form keeps working either way.
 
 ---
 

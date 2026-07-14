@@ -323,6 +323,14 @@
       var hp = form.querySelector('input[name="company"]');
       if (hp && hp.value) return;
       if (!form.checkValidity()) { form.reportValidity(); return; }
+      // Cloudflare Turnstile: don't submit until the challenge has produced a token
+      if (form.querySelector('.cf-turnstile')) {
+        var tsField = form.querySelector('[name="cf-turnstile-response"]');
+        if (!tsField || !tsField.value) {
+          setStatus('err', 'Please complete the verification below, then send again.');
+          return;
+        }
+      }
       var endpoint = form.getAttribute('action') || 'php/send.php';
       var fd = new FormData(form);
       setStatus('', '');
@@ -342,6 +350,8 @@
         })
         .finally(function () {
           if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = submitBtn.dataset.label || 'Send enquiry'; }
+          // reset Turnstile so a fresh token is issued for the next attempt (tokens are single-use)
+          if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} }
         });
     });
     function setStatus(kind, msg) {
